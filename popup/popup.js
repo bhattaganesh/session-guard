@@ -47,11 +47,13 @@ async function renderServices() {
     row.innerHTML = `
       <div class="service-avatar" style="background:${status.color}">${status.icon}</div>
       <div class="service-info">
-        <div class="service-name">${status.name}</div>
+        <div class="service-name"></div>
         <div class="service-state ${stateClass}">${stateLabel}</div>
       </div>
       <div class="status-dot ${stateClass}"></div>
     `;
+
+    row.querySelector('.service-name').textContent = status.name;
 
     serviceList.appendChild(row);
   }
@@ -69,7 +71,7 @@ guardToggle.addEventListener('change', () => {
 
 logoutBtn.addEventListener('click', async () => {
   logoutBtn.disabled = true;
-  logoutBtn.textContent = 'Signing out…';
+  logoutBtn.innerHTML = '<span class="spinner"></span>Signing out…';
 
   await chrome.runtime.sendMessage({ action: 'manualLogout' });
 

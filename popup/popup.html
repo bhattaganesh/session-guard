@@ -143,6 +143,19 @@
     .btn-primary   { background: #1a73e8; color: #fff; }
     .btn-secondary { background: #f1f3f4; color: #444; }
 
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     .feedback { font-size: 11px; color: #34a853; text-align: center; display: none; }
   </style>
 </head>

@@ -37,8 +37,8 @@ function renderActiveList() {
     item.innerHTML = `
       <div class="svc-avatar" style="background:${service.color ?? '#888'}">${service.icon ?? '?'}</div>
       <div class="svc-info">
-        <div class="svc-name">${service.name}</div>
-        <div class="svc-domain">${service.domains[0]}</div>
+        <div class="svc-name"></div>
+        <div class="svc-domain"></div>
       </div>
       <label class="toggle svc-toggle">
         <input type="checkbox" data-id="${service.id}" ${service.enabled ? 'checked' : ''} />
@@ -46,6 +46,9 @@ function renderActiveList() {
       </label>
       <button class="remove-btn" data-id="${service.id}" title="Remove">×</button>
     `;
+
+    item.querySelector('.svc-name').textContent = service.name;
+    item.querySelector('.svc-domain').textContent = service.domains[0];
 
     container.appendChild(item);
   }
@@ -103,10 +106,31 @@ function renderLibrary() {
 // ── Add custom service ────────────────────────────────────────────────────────
 
 document.getElementById('addCustomBtn').addEventListener('click', () => {
-  const name   = document.getElementById('customName').value.trim();
-  const domain = document.getElementById('customDomain').value.trim();
+  const nameInput = document.getElementById('customName');
+  const domainInput = document.getElementById('customDomain');
+  const name   = nameInput.value.trim();
+  let domain = domainInput.value.trim();
 
-  if (!name || !domain) return;
+  // Clear previous error states
+  nameInput.style.borderColor = '';
+  domainInput.style.borderColor = '';
+
+  let hasError = false;
+  if (!name) {
+    nameInput.style.borderColor = '#d93025';
+    hasError = true;
+  }
+  if (!domain) {
+    domainInput.style.borderColor = '#d93025';
+    hasError = true;
+  }
+  
+  if (hasError) return;
+
+  // Basic domain format validation mapping
+  if (!domain.startsWith('.')) {
+    domain = '.' + domain;
+  }
 
   const id = `custom_${Date.now()}`;
   services.push({
@@ -136,8 +160,8 @@ document.getElementById('guardToggle').addEventListener('change', (e) => {
 
 // ── Persist ───────────────────────────────────────────────────────────────────
 
-function save() {
-  chrome.storage.sync.set({ services });
+async function save() {
+  await chrome.storage.sync.set({ services });
   showToast();
 }
 

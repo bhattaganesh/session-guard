@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Session Guard",
   "version": "1.0.0",
-  "description": "Signs you out of personal accounts when you close Chrome. Tabs are never closed.",
+  "description": "Automatically signs out of personal accounts on protected services when you close Google Chrome. Tabs are never closed, your work is never lost.",
   "permissions": [
     "cookies",
     "windows",
