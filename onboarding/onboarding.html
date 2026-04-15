@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to Session Guard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8f9fa;
+      color: #1f1f1f;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 520px;
+      width: 100%;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    }
+
+    .logo {
+      width: 52px;
+      height: 52px;
+      background: #1a73e8;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 24px;
+    }
+
+    h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 32px;
+    }
+
+    .how-it-works {
+      background: #f0f7ff;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+    }
+    .how-it-works h3 { font-size: 12px; font-weight: 600; color: #1a73e8; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 12px; }
+    .step {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .step:last-child { margin-bottom: 0; }
+    .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #1a73e8;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step p { font-size: 13px; color: #444; line-height: 1.4; }
+
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    .service-check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 2px solid #e8eaed;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .service-check:hover { border-color: #1a73e8; background: #f0f7ff; }
+    .service-check.selected { border-color: #1a73e8; background: #f0f7ff; }
+    .service-check input { display: none; }
+    .svc-av {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .svc-label { font-size: 13px; font-weight: 500; }
+    .checkmark {
+      margin-left: auto;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .service-check.selected .checkmark {
+      background: #1a73e8;
+      border-color: #1a73e8;
+      color: #fff;
+      font-size: 10px;
+    }
+
+    .btn-finish {
+      width: 100%;
+      padding: 14px;
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-finish:hover { background: #1557b0; }
+    .btn-finish:disabled { background: #ccc; cursor: default; }
+
+    .skip {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 13px;
+      color: #888;
+    }
+    .skip a { color: #1a73e8; text-decoration: none; cursor: pointer; }
+    .skip a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">SG</div>
+    <h1>Welcome to Session Guard</h1>
+    <p class="subtitle">
+      Session Guard signs you out of your personal accounts whenever you close Chrome —
+      without closing your open tabs. Your work accounts are never touched.
+    </p>
+
+    <div class="how-it-works">
+      <h3>How it works</h3>
+      <div class="step">
+        <div class="step-num">1</div>
+        <p><strong>You close Chrome.</strong> Session Guard clears the session cookies for your selected accounts.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <p><strong>Next time you open Chrome,</strong> your tabs restore normally — but protected accounts require re-login.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <p><strong>You log back in once.</strong> Your password manager fills in your credentials automatically.</p>
+      </div>
+    </div>
+
+    <h2>Which accounts do you want to protect?</h2>
+    <div class="service-grid" id="serviceGrid"></div>
+
+    <button class="btn-finish" id="finishBtn" disabled>Get Started</button>
+    <p class="skip">You can add or remove services later in <a id="skipLink">Settings</a>.</p>
+  </div>
+
+  <script src="onboarding.js"></script>
+</body>
+</html>

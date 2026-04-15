@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session Guard — Settings</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8f9fa;
+      color: #1f1f1f;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .page {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .page-icon {
+      width: 40px;
+      height: 40px;
+      background: #1a73e8;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    h1 { font-size: 22px; font-weight: 700; }
+    .page-header p { font-size: 13px; color: #666; margin-top: 2px; }
+
+    /* Sections */
+    .section { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    .section-title { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 16px; }
+
+    /* Toggle row */
+    .pref-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .pref-label h3 { font-size: 14px; font-weight: 500; }
+    .pref-label p  { font-size: 12px; color: #888; margin-top: 3px; }
+    .toggle {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #ccc;
+      border-radius: 22px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      left: 3px; top: 3px;
+      width: 16px; height: 16px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .toggle input:checked + .toggle-slider { background: #1a73e8; }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+    /* Service items */
+    .service-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .service-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .service-item:first-child { padding-top: 0; }
+
+    .svc-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .svc-info { flex: 1; min-width: 0; }
+    .svc-name   { font-size: 13px; font-weight: 500; }
+    .svc-domain { font-size: 11px; color: #999; margin-top: 2px; }
+
+    .svc-toggle { flex-shrink: 0; }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 4px;
+      transition: color 0.15s;
+      flex-shrink: 0;
+    }
+    .remove-btn:hover { color: #d93025; }
+
+    /* Add from library */
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .library-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1.5px solid #e8eaed;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .library-btn:hover { border-color: #1a73e8; background: #f0f7ff; }
+    .library-btn.added { border-color: #ccc; color: #aaa; cursor: default; pointer-events: none; }
+    .library-btn .lib-avatar {
+      width: 22px; height: 22px;
+      border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+
+    /* Custom service form */
+    .form-row { display: flex; gap: 8px; margin-top: 12px; }
+    .form-row input {
+      flex: 1;
+      padding: 9px 12px;
+      border: 1.5px solid #e8eaed;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-row input:focus { border-color: #1a73e8; }
+    .form-row input::placeholder { color: #aaa; }
+
+    .btn-add {
+      padding: 9px 16px;
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-add:hover { background: #1557b0; }
+
+    .save-toast {
+      display: none;
+      text-align: center;
+      font-size: 12px;
+      color: #34a853;
+      margin-top: 12px;
+    }
+
+    .empty-list { font-size: 13px; color: #aaa; text-align: center; padding: 20px 0; }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <div class="page-header">
+      <div class="page-icon">SG</div>
+      <div>
+        <h1>Session Guard</h1>
+        <p>Configure which accounts are protected on this browser.</p>
+      </div>
+    </div>
+
+    <!-- Protection toggle -->
+    <div class="section">
+      <div class="section-title">Protection</div>
+      <div class="pref-row">
+        <div class="pref-label">
+          <h3>Auto-logout on browser close</h3>
+          <p>Signs out of enabled services when you close Chrome and on next startup.</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="guardToggle" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Active services -->
+    <div class="section">
+      <div class="section-title">Protected Services</div>
+      <div id="activeServiceList"><div class="empty-list">No services added yet.</div></div>
+    </div>
+
+    <!-- Add from library -->
+    <div class="section">
+      <div class="section-title">Add from Library</div>
+      <div class="library-grid" id="libraryGrid"></div>
+    </div>
+
+    <!-- Add custom service -->
+    <div class="section">
+      <div class="section-title">Add Custom Service</div>
+      <p style="font-size:12px;color:#888;margin-bottom:8px;">Enter the service name and its primary domain (e.g. <code>.myapp.com</code>).</p>
+      <div class="form-row">
+        <input id="customName"   placeholder="Name (e.g. Jira)" />
+        <input id="customDomain" placeholder="Domain (e.g. .atlassian.net)" />
+        <button class="btn-add" id="addCustomBtn">Add</button>
+      </div>
+      <div class="save-toast" id="saveToast">Settings saved.</div>
+    </div>
+
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>

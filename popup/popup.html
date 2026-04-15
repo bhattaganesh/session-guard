@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session Guard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      width: 280px;
+      background: #ffffff;
+      color: #1f1f1f;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .header-icon {
+      width: 28px;
+      height: 28px;
+      background: #1a73e8;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .header-title { font-size: 15px; font-weight: 600; }
+    .header-sub   { font-size: 11px; color: #888; margin-top: 1px; }
+
+    /* Toggle row */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .toggle-label { font-size: 12px; color: #555; }
+    .toggle {
+      position: relative;
+      width: 36px;
+      height: 20px;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #ccc;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .toggle input:checked + .toggle-slider { background: #1a73e8; }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(16px); }
+
+    /* Service list */
+    .services { padding: 8px 0; }
+
+    .service-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+    }
+    .service-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .service-info { flex: 1; min-width: 0; }
+    .service-name  { font-size: 13px; font-weight: 500; }
+    .service-state { font-size: 11px; margin-top: 1px; }
+    .service-state.signed-in  { color: #34a853; }
+    .service-state.signed-out { color: #9aa0a6; }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-dot.signed-in  { background: #34a853; }
+    .status-dot.signed-out { background: #dadce0; }
+
+    .empty-state {
+      text-align: center;
+      padding: 20px 16px;
+      color: #9aa0a6;
+      font-size: 12px;
+    }
+
+    .loading { color: #9aa0a6; font-size: 12px; padding: 16px; text-align: center; }
+
+    /* Footer buttons */
+    .footer {
+      padding: 10px 16px 14px;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .btn {
+      width: 100%;
+      padding: 9px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.88; }
+    .btn:disabled { opacity: 0.4; cursor: default; }
+    .btn-primary   { background: #1a73e8; color: #fff; }
+    .btn-secondary { background: #f1f3f4; color: #444; }
+
+    .feedback { font-size: 11px; color: #34a853; text-align: center; display: none; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-icon">SG</div>
+    <div>
+      <div class="header-title">Session Guard</div>
+      <div class="header-sub">Auto-logout on browser close</div>
+    </div>
+  </div>
+
+  <div class="toggle-row">
+    <span class="toggle-label">Protection enabled</span>
+    <label class="toggle">
+      <input type="checkbox" id="guardToggle" checked />
+      <span class="toggle-slider"></span>
+    </label>
+  </div>
+
+  <div class="services" id="serviceList">
+    <div class="loading">Checking sessions…</div>
+  </div>
+
+  <div class="footer">
+    <button class="btn btn-primary" id="logoutBtn">Sign Out Now</button>
+    <button class="btn btn-secondary" id="settingsBtn">Manage Services</button>
+    <div class="feedback" id="feedback">Signed out successfully.</div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
