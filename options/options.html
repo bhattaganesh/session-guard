@@ -180,12 +180,40 @@
     }
     .btn-add:hover { background: #1557b0; }
 
-    .save-toast {
+    /* Awesome Alerts (Fixed Toast) */
+    .toast-message {
       display: none;
-      text-align: center;
-      font-size: 12px;
-      color: #34a853;
-      margin-top: 12px;
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      z-index: 1000;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      animation: toastSlideUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+    
+    .toast-message.success {
+      color: #0c6a38;
+      background: #e6f4ea;
+      border: 1px solid #ceead6;
+    }
+    
+    .toast-message.error {
+      color: #b31412;
+      background: #fce8e6;
+      border: 1px solid #fad2cf;
+    }
+    
+    .toast-icon { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    @keyframes toastSlideUp {
+      from { opacity: 0; transform: translate(-50%, 16px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
     }
 
     .empty-list { font-size: 13px; color: #aaa; text-align: center; padding: 20px 0; }
@@ -238,10 +266,13 @@
         <input id="customDomain" placeholder="Domain (e.g. .atlassian.net)" autocomplete="off" />
         <button class="btn-add" id="addCustomBtn">Add</button>
       </div>
-      <div class="save-toast" id="saveToast">Settings saved.</div>
     </div>
 
   </div>
+
+  <!-- Global Fixed Toast -->
+  <div class="toast-message" id="toastMessage"></div>
+
   <script src="options.js" type="module"></script>
 </body>
 </html>

@@ -178,12 +178,21 @@ async function getServiceStatuses() {
   const statuses = {};
 
   for (const service of services) {
+    const cleanDomain = service.domains[0].startsWith('.') ? service.domains[0].slice(1) : service.domains[0];
+    const faviconUrl = `https://s2.googleusercontent.com/s2/favicons?domain=${encodeURIComponent(cleanDomain)}&sz=64`;
+
+    // Use real session detection for all services so the popup shows truthful state.
+    // Custom SPA services with zero cookies (e.g. MeroShare) will show "Signed out"
+    // in the UI — that is honest. detectActiveSessions STILL guarantees their
+    // localStorage is scrubbed on every Chrome close regardless of this UI status.
+    const signedIn = service.enabled ? await isSessionActive(service) : false;
+
     statuses[service.id] = {
       name: service.name,
       enabled: service.enabled,
-      signedIn: service.enabled ? await isSessionActive(service) : false,
-      icon: service.icon,
-      color: service.color,
+      signedIn,
+      iconUrl: faviconUrl,
+      color: '#ffffff',
     };
   }
 

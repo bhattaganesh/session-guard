@@ -44,8 +44,10 @@ async function renderServices() {
     const stateLabel = status.signedIn ? 'Signed in' : 'Signed out';
     if (status.signedIn) anySignedIn = true;
 
+    const avatarContent = `<img src="${status.iconUrl}" style="width:100%;height:100%;object-fit:contain;border-radius:inherit;" />`;
+
     row.innerHTML = `
-      <div class="service-avatar" style="background:${status.color}">${status.icon}</div>
+      <div class="service-avatar" style="background:#ffffff; border: 1px solid #f0f0f0;">${avatarContent}</div>
       <div class="service-info">
         <div class="service-name"></div>
         <div class="service-state ${stateClass}">${stateLabel}</div>

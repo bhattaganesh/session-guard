@@ -1,16 +1,37 @@
 {
   "manifest_version": 3,
   "name": "Session Guard",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Automatically signs out of personal accounts on protected services when you close Google Chrome. Tabs are never closed, your work is never lost.",
   "permissions": [
     "cookies",
     "windows",
     "storage",
     "tabs",
-    "notifications"
+    "notifications",
+    "browsingData",
+    "favicon"
   ],
   "host_permissions": [
+    "*://*.google.com/*",
+    "*://accounts.google.com/*",
+    "*://mail.google.com/*",
+    "*://*.github.com/*",
+    "*://github.com/*",
+    "*://*.microsoft.com/*",
+    "*://*.live.com/*",
+    "*://*.outlook.com/*",
+    "*://*.microsoftonline.com/*",
+    "*://*.facebook.com/*",
+    "*://*.twitter.com/*",
+    "*://*.x.com/*",
+    "*://*.linkedin.com/*",
+    "*://*.slack.com/*",
+    "*://*.notion.so/*",
+    "*://*.figma.com/*",
+    "*://*.dropbox.com/*"
+  ],
+  "optional_host_permissions": [
     "<all_urls>"
   ],
   "background": {
