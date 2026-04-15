@@ -252,3 +252,11 @@ async function setExtensionIcon() {
     console.warn('[SessionGuard] setExtensionIcon failed:', err);
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Top-level initialisation — runs every time the service worker starts/restarts
+// ─────────────────────────────────────────────────────────────────────────────
+// MV3 service workers are killed when idle and restarted on demand. Chrome does
+// NOT persist the icon set via chrome.action.setIcon() across restarts, so we
+// must re-apply it on every cold start, not just on install/startup events.
+setExtensionIcon();
