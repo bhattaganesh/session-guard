@@ -233,14 +233,14 @@
       <div class="section-title">Add Custom Service</div>
       <p style="font-size:12px;color:#888;margin-bottom:8px;">Enter the service name and its primary domain (e.g. <code>.myapp.com</code>).</p>
       <div class="form-row">
-        <input id="customName"   placeholder="Name (e.g. Jira)" />
-        <input id="customDomain" placeholder="Domain (e.g. .atlassian.net)" />
+        <input id="customName"   placeholder="Name (e.g. Jira)"             autocomplete="off" />
+        <input id="customDomain" placeholder="Domain (e.g. .atlassian.net)" autocomplete="off" />
         <button class="btn-add" id="addCustomBtn">Add</button>
       </div>
       <div class="save-toast" id="saveToast">Settings saved.</div>
     </div>
 
   </div>
-  <script src="options.js"></script>
+  <script src="options.js" type="module"></script>
 </body>
 </html>

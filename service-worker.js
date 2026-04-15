@@ -25,11 +25,13 @@ import { detectActiveSessions, clearCookiesFor, isSessionActive } from './lib/co
 
 /** Phase 2: runs every time Chrome (re)starts */
 chrome.runtime.onStartup.addListener(() => {
+  setExtensionIcon();
   runStartupLogout();
 });
 
 /** First install: open onboarding + write default settings */
 chrome.runtime.onInstalled.addListener(({ reason }) => {
+  setExtensionIcon();
   if (reason === 'install') {
     const defaultServices = SERVICE_LIBRARY.map((s) => ({
       ...s,
@@ -199,4 +201,54 @@ async function getSettings() {
     services: defaultServices,
     guardEnabled: true,
   });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Toolbar icon — rendered via OffscreenCanvas so "SG" text appears properly
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Draws the "SG" icon at every required size using OffscreenCanvas and
+ * applies it to the toolbar button. Called on install and every startup so
+ * the icon is always correct even after the service worker restarts.
+ */
+async function setExtensionIcon() {
+  try {
+    const imageData = {};
+
+    for (const size of [16, 32, 48, 128]) {
+      const canvas = new OffscreenCanvas(size, size);
+      const ctx    = canvas.getContext('2d');
+
+      // Rounded-square background
+      const radius = size * 0.22;
+      ctx.fillStyle = '#1a73e8';
+      ctx.beginPath();
+      ctx.moveTo(radius, 0);
+      ctx.lineTo(size - radius, 0);
+      ctx.arcTo(size, 0,    size, radius,      radius);
+      ctx.lineTo(size, size - radius);
+      ctx.arcTo(size, size, size - radius, size, radius);
+      ctx.lineTo(radius, size);
+      ctx.arcTo(0, size, 0, size - radius,   radius);
+      ctx.lineTo(0, radius);
+      ctx.arcTo(0, 0,   radius, 0,            radius);
+      ctx.closePath();
+      ctx.fill();
+
+      // "SG" text — scale font relative to icon size
+      ctx.fillStyle    = '#ffffff';
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font         = `bold ${Math.round(size * 0.38)}px Arial, sans-serif`;
+      ctx.fillText('SG', size / 2, size / 2 + size * 0.02);
+
+      imageData[size] = ctx.getImageData(0, 0, size, size);
+    }
+
+    await chrome.action.setIcon({ imageData });
+  } catch (err) {
+    // OffscreenCanvas may not be available in very old Chrome builds — silently ignore
+    console.warn('[SessionGuard] setExtensionIcon failed:', err);
+  }
 }
