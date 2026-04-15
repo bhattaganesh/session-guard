@@ -18,16 +18,17 @@ for (const svc of SERVICE_LIBRARY) {
     <div class="checkmark">${selected.has(svc.id) ? '✓' : ''}</div>
   `;
 
-  label.addEventListener('click', () => {
+  const checkbox = label.querySelector('input');
+  checkbox.addEventListener('change', () => {
     const id = svc.id;
-    if (selected.has(id)) {
-      selected.delete(id);
-      label.classList.remove('selected');
-      label.querySelector('.checkmark').textContent = '';
-    } else {
+    if (checkbox.checked) {
       selected.add(id);
       label.classList.add('selected');
       label.querySelector('.checkmark').textContent = '✓';
+    } else {
+      selected.delete(id);
+      label.classList.remove('selected');
+      label.querySelector('.checkmark').textContent = '';
     }
     finishBtn.disabled = selected.size === 0;
   });
